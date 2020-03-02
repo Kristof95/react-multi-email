@@ -14,6 +14,7 @@ export interface IReactMultiEmailProps {
   ) => void;
   className?: string;
   placeholder?: string | React.ReactNode;
+  maxLength: number;
 }
 
 export interface IReactMultiEmailState {
@@ -21,6 +22,7 @@ export interface IReactMultiEmailState {
   propsEmails?: string[];
   emails: string[];
   inputValue?: string;
+  maxLength: number;
 }
 
 class ReactMultiEmail extends React.Component<
@@ -31,6 +33,7 @@ class ReactMultiEmail extends React.Component<
     focused: false,
     emails: [],
     inputValue: '',
+    maxLength: 25
   };
 
   emailInputRef: React.RefObject<HTMLInputElement>;
@@ -45,6 +48,7 @@ class ReactMultiEmail extends React.Component<
         emails: nextProps.emails || [],
         inputValue: '',
         focused: false,
+        maxLength: nextProps.maxLength || 0,
       };
     }
     return null;
@@ -165,8 +169,9 @@ class ReactMultiEmail extends React.Component<
     }
   };
 
-  handleOnChange = (e: React.SyntheticEvent<HTMLInputElement>) =>
+  handleOnChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
     this.onChangeInputValue(e.currentTarget.value);
+  }
 
   handleOnBlur = (e: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({ focused: false });
@@ -179,7 +184,7 @@ class ReactMultiEmail extends React.Component<
     });
 
   render() {
-    const { focused, emails, inputValue } = this.state;
+    const { focused, emails, inputValue, maxLength } = this.state;
     const { style, getLabel, className = '', noClass, placeholder } = this.props;
 
     // removeEmail
@@ -209,6 +214,7 @@ class ReactMultiEmail extends React.Component<
           onChange={this.handleOnChange}
           onKeyDown={this.handleOnKeydown}
           onKeyUp={this.handleOnKeyup}
+          maxLength={this.maxLength}
         />
       </div>
     );
